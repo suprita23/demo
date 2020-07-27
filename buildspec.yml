@@ -1,0 +1,30 @@
+version: 0.1
+ 
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login --no-include-email --region us-east-1)
+      - ECR_REPO="736104672109.dkr.ecr.us-east-1.amazonaws.com/demo-api"
+      - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+      - IMAGE_URI=${ECR_REPO}:${TAG}
+  build:
+    commands:
+      - echo Build started on `date`
+      - mvn -DskipTests=true package
+      - docker images
+      - docker build -t demo-api .
+      - docker tag demo-api:latest 736104672109.dkr.ecr.us-east-1.amazonaws.com/demo-api:latest    
+  post_build:
+    commands:
+      - printenv
+      - echo Build completed on `date`
+      - echo $(docker images)
+      - echo Pushing docker image
+      - docker push 736104672109.dkr.ecr.us-east-1.amazonaws.com/demo-api:latest
+      - echo push completed
+artifacts:
+  files:
+    - 'Dockerfile'
+    - 'target/demo2-0.0.1-SNAPSHOT.jar'
