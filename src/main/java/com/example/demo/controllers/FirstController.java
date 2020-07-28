@@ -14,7 +14,7 @@ public class FirstController {
     public List<String> index() {
         List<String> s = new ArrayList<>();
         s.add("Docker + AWS CodePipline Tutorial");
-        s.add("Learn more at: https://github.com/sixthpoint/Docker-AWS-CodePipeline");
+        s.add("This is a sample app");
         return s;
     }
 }
