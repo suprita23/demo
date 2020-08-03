@@ -27,12 +27,14 @@ public class FirstController {
  
     @GetMapping("/api" )
     public List<String> index() {
+    	AWSXRay.beginSegment("demo-Segment");
     	testAWSClientInstrumentation();
     	Subsegment sub = AWSXRay.beginSubsegment("handleDynamoRequest");
         List<String> s = new ArrayList<>();
         s.add("Docker + AWS CodePipline Tutorial");
         s.add("This is a sample app");
         AWSXRay.endSubsegment();
+        AWSXRay.endSegment();
         return s;
     }
     
